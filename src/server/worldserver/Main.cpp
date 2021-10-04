@@ -649,7 +649,7 @@ AsyncAcceptor* StartRaSocketAcceptor(Acore::Asio::IoContext& ioContext)
 
 bool LoadRealmInfo(Acore::Asio::IoContext& ioContext)
 {
-    QueryResult result = LoginDatabase.PQuery("SELECT id, name, address, localAddress, localSubnetMask, port, icon, flag, timezone, allowedSecurityLevel, population, gamebuild FROM realmlist WHERE id = %u", realm.Id.Realm);
+    QueryResult result = LoginDatabase.PQuery("SELECT id, name, address, localAddress, localSubnetMask, port, icon, flag, timezone, allowedSecurityLevel, population, realmbuilds FROM realmlist WHERE id = %u", realm.Id.Realm);
     if (!result)
         return false;
 

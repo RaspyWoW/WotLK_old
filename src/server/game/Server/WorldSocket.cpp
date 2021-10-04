@@ -279,7 +279,10 @@ struct AccountInfo
         // LEFT JOIN account r ON a.id = r.recruiter
         // WHERE a.username = ? ORDER BY aa.RealmID DESC LIMIT 1
         Id = fields[0].GetUInt32();
-        SessionKey = fields[1].GetBinary<SESSION_KEY_LENGTH>();
+        std::string sesskey = fields[1].GetString();
+        BigNumber K;
+        K.SetHexStr(sesskey);
+        SessionKey = K.ToByteArray<SESSION_KEY_LENGTH>();
         LastIP = fields[2].GetString();
         IsLockedToIP = fields[3].GetBool();
         LockCountry = fields[4].GetString();
@@ -487,7 +490,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
         return;
     }
 
-    if (authSession->RealmID != realm.Id.Realm)
+    if (authSession->RealmID != realm.Id.Realm) // Needs some investigation here
     {
         SendAuthResponseError(REALM_LIST_REALM_NOT_FOUND);
         LOG_ERROR("network", "WorldSocket::HandleAuthSession: Client %s requested connecting with realm id %u but this realm has id %u set in config.",
